@@ -1,0 +1,38 @@
+@prefix: input;
+:export {
+  prefix: @prefix;
+}
+.@{prefix}- {
+  &input {
+    margin-bottom: 14px;
+    &.flex {
+      display: flex;
+      // align-items: center;
+      .ant-form-item-control-wrapper {
+        flex: 1;
+      }
+    }
+    .ant-form-item-label {
+      white-space: normal;
+    }
+    &.ant-form-item-with-help {
+      margin-bottom: 0px;
+    }
+    .ant-form-explain {
+      margin-top: -5px;
+      margin-bottom: 0px;
+    }
+    .ant-form-item-required::before {
+      color: #d93026;
+    }
+    .ant-time-picker-panel-combobox {
+      width: 112px;
+    }
+  }
+  &unset-line-height {
+    .ant-form-item-label,
+    .ant-form-item-control {
+      line-height: unset;
+    }
+  }
+}
