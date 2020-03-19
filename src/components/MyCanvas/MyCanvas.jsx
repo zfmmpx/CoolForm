@@ -166,6 +166,7 @@ const MyCanvas = ({
         },
       });
       that.g6Instance = new G6.Graph({
+        // 这个是依附的container，也是onMouseMove和onMouseMove事件绑定的div
         container: ref.current,
         width: canvasData.width,
         height: canvasData.height,
@@ -259,16 +260,15 @@ const MyCanvas = ({
 
   // Div的mouseDown事件
   const onMouseUp = ({ target, pageX, pageY }) => {
-    console.log('11111111:', 11111111);
     if (disabled || that.isDraggingNode) {
       that.isDraggingNode = false;
       return;
     }
-    const actualLeft = getElementLeft(target);
+    const actualLeft = getElementLeft(target); // 鼠标按下的点距离页面原点（页面左上角）的距离S
     const actualTop = getElementTop(target);
-    const origX = pageX - actualLeft + layoutScrollLeft;
+    const origX = pageX - actualLeft + layoutScrollLeft; // 点距离div原点（div左上角）的距离
     const origY = pageY - actualTop + layoutScrollTop;
-    const x = origX / canvasData?.width;
+    const x = origX / canvasData?.width; // 百分比
     const y = origY / canvasData?.height;
 
     // 把currentRegion存到redux
@@ -394,7 +394,7 @@ const MyCanvas = ({
         className={cx('MyCanvas')}
         ref={ref}
       />
-      {/* {disabled && (
+      {disabled && (
         <canvas
           ref={canvasRef}
           width={canvasData.width}
@@ -407,14 +407,17 @@ const MyCanvas = ({
               return;
             }
             if (
-              formUtils.queryValue(get(currentScenario, 'affect')) !== 'inside' ||
+              formUtils.queryValue(get(currentScenario, 'affect')) !==
+                'inside' ||
               formUtils.queryValue(get(currentScenario, 'affect')) !== 'outside'
             ) {
-              message.warning('请选择"框选区域内检测"或"框选区域外检测",再进行框选区域');
+              message.warning(
+                '请选择"框选区域内检测"或"框选区域外检测",再进行框选区域',
+              );
             }
           }}
         />
-      )} */}
+      )}
     </>
   );
 };
