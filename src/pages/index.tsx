@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState, useReducer } from 'react';
 import styles from './index.less';
-import { CoolForm, Input } from '../components/CoolForm';
+import { CoolForm, Input } from '@/components/CoolForm';
 import dataConfig from './dataConfig';
 import { Button } from 'antd';
 
