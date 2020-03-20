@@ -147,7 +147,7 @@ const MyCanvas = ({
               (lastPolygon.length === 1 && lastSecondNode.id === target.id);
 
             // 下面这个showDraw比较难理解。
-            // 只有当(lastPolygon.length !== 1 && lastNode.id === target.id)，也就是你的最后一个多边形里面的点多于1个，且你画最后一条线的时候才会画多边形。
+            // 只有当(lastPolygon.length !== 1 && lastNode.id === target.id)，也就是你的最后一个多边形里面的点多于1个，且你画最后一条线的时候才会画多边形（填色）。
             // 也就是说，你整个画布，也只是在你画最后一条线（指最后一个多边形的最后一条线）的时候画出所有的多边形（也就是给所有多边形填色）
             // 如果没有这个if (showDraw)条件，当你的画布上的点越来越多，填色会越来越深。
             // 可以试着把opacity改为0.02，再注释掉if (showDraw)条件试试。
@@ -188,7 +188,7 @@ const MyCanvas = ({
             lineWidth: 2,
           },
         },
-        // 每条边都是一个custom-edge',然后一个custom-edge包括了边本身和由你画出来的多边形定义的一个浅色的多边形polygon
+        // 每条边都是一个custom-edge'。
         defaultEdge: {
           // style: {
           //   stroke: '#E9E9E9',
