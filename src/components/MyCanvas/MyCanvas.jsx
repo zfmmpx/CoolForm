@@ -213,6 +213,7 @@ const MyCanvas = ({
 
   // 添加hover状态
   useEffect(() => {
+    // 鼠标进入
     that.g6Instance.on('node:mouseenter', e => {
       if (disabled) return;
       const nodeItem = e.item;
@@ -268,7 +269,7 @@ const MyCanvas = ({
     that.nextCurrentRegion,
   ]);
 
-  // Div的mouseDown事件
+  // Div的mouseUp事件
   const onMouseUp = ({ target, pageX, pageY }) => {
     if (disabled || that.isDraggingNode) {
       that.isDraggingNode = false;
@@ -384,8 +385,8 @@ const MyCanvas = ({
     }
   };
 
-  // 在mask上画图
-  const canvasRef = useRef(null);
+  // 在mask上画图 // 没用了，废弃了
+  // const canvasRef = useRef(null);
 
   return (
     <>
@@ -407,7 +408,7 @@ const MyCanvas = ({
       />
       {disabled && (
         <canvas
-          ref={canvasRef}
+          // ref={canvasRef}
           width={canvasData.width}
           height={canvasData.height}
           className={cx('canvas-mask')}
