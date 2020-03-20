@@ -49,7 +49,6 @@ const MyCanvas = ({ dispatch }) => {
 };
 
 export default connect(({ canvas }) => {
-  console.log('canvas:', canvas);
   return {
     preStep: canvas.preStep,
   };

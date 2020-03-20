@@ -107,11 +107,13 @@ const MyCanvas = ({
   // 初始化和更新Graph
   useEffect(() => {
     if (!that.g6Instance) {
+      // 先注册一个自定义边custom-edge
       G6.registerEdge('custom-edge', {
         itemType: 'edge',
         draw: (item, group) => {
           const source = item.sourceNode.getModel();
           const target = item.targetNode.getModel();
+          // group代表节点分组，'line'是g6支持的，但是g6官方文档上没写..
           group.addShape('line', {
             attrs: {
               x1: source.x,
@@ -121,6 +123,7 @@ const MyCanvas = ({
               stroke: '#E9E9E9',
             },
           });
+          // 拿到所有的nodes，就是你这个多边形所有的点
           const nodes = that.g6Instance.getNodes().map(n => n.getModel());
           const nodesLength = nodes.length;
           const lastNode = nodes[nodes.length - 1];
@@ -143,14 +146,20 @@ const MyCanvas = ({
               (lastPolygon.length !== 1 && lastNode.id === target.id) ||
               (lastPolygon.length === 1 && lastSecondNode.id === target.id);
 
+            // 下面这个showDraw比较难理解。
+            // 只有当(lastPolygon.length !== 1 && lastNode.id === target.id)，也就是你的最后一个多边形里面的点多于1个，且你画最后一条线的时候才会画多边形。
+            // 也就是说，你整个画布，也只是在你画最后一条线（指最后一个多边形的最后一条线）的时候画出所有的多边形（也就是给所有多边形填色）
+            // 如果没有这个if (showDraw)条件，当你的画布上的点越来越多，填色会越来越深。
+            // 可以试着把opacity改为0.02，再注释掉if (showDraw)条件试试。
             if (showDraw) {
+              // 画由线框住的多边形
               allPolygons.forEach(nodesToDraw => {
                 if (nodesToDraw.length > 2) {
                   const opacity = 0.35;
                   group.addShape('polygon', {
                     attrs: {
                       points: nodesToDraw
-                        .slice(0, nodesToDraw.length - 1)
+                        .slice(0, nodesToDraw.length - 1) // 这行是为了不让tempPoint也参与到画多边形，可以注释后查看没有这行的效果。
                         .map(node => {
                           return [node.x, node.y];
                         }),
@@ -179,6 +188,7 @@ const MyCanvas = ({
             lineWidth: 2,
           },
         },
+        // 每条边都是一个custom-edge',然后一个custom-edge包括了边本身和由你画出来的多边形定义的一个浅色的多边形polygon
         defaultEdge: {
           // style: {
           //   stroke: '#E9E9E9',
@@ -301,6 +311,7 @@ const MyCanvas = ({
   };
 
   const onMouseMove = event => {
+    // 如果没有tempPoint而且刚刚画完一个闭合的图形，或者根本还没开始画（画面上没有nodes），就return
     if (
       (justFinishAPolygon && !tempPoint) ||
       disabled ||
@@ -461,7 +472,7 @@ export default connect(({ canvas }) => {
     scenarios,
     layoutScrollTop: canvas.layoutScrollTop,
     layoutScrollLeft: canvas.layoutScrollLeft,
-    g6Data: canvas.g6Data,
+    // g6Data: canvas.g6Data, // 没有用到model里面的g6Data，把他放到useState里面了
     currentRegion,
     currentRegionLast,
     tempPoint,
